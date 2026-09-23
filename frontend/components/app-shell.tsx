@@ -24,7 +24,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getMe } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
+import { DEMO_TOKEN, useAuth } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 
 const navItems = [
@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const meQuery = useQuery({
     queryKey: ["me", token],
     queryFn: () => getMe(token as string),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && token !== DEMO_TOKEN,
     retry: false,
   });
 
@@ -66,7 +66,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [meQuery.data, setSession, token]);
 
   useEffect(() => {
-    if (meQuery.isError) {
+    if (meQuery.isError && token !== DEMO_TOKEN) {
       clearSession();
     }
   }, [clearSession, meQuery.isError]);

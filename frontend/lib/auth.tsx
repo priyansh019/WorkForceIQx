@@ -5,6 +5,21 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import type { User } from "@/lib/api";
 
+export const DEMO_TOKEN = "workforceiq-demo-session";
+export const DEMO_USER: User = {
+  id: 1,
+  email: "demo@workforceiq.app",
+  full_name: "Alex Morgan",
+  is_active: true,
+  role: {
+    id: 1,
+    name: "HR Administrator",
+    description: "Demo workspace administrator",
+  },
+  employee_id: null,
+  created_at: "2025-01-01T00:00:00Z",
+};
+
 type AuthContextValue = {
   ready: boolean;
   token: string | null;
