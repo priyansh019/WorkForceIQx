@@ -149,4 +149,5 @@ pytest
 ```
 
 Current tests cover registration, login, `/me`, and role-restricted user listing.
+In the testing phase.
 
