@@ -1,58 +1,228 @@
 # WorkForceIQ
 
-AI-powered workforce intelligence for smarter HR decisions.
+**AI-powered workforce intelligence for smarter, evidence-backed HR decisions.**
 
-WorkForceIQ is a full-stack HR intelligence platform. Phase 1 establishes the production architecture, authentication, RBAC foundations, database models, seed data, frontend shell, and Docker setup. Later phases can build on the same backend services, schemas, AI prompt structure, and UI navigation without replacing the foundation.
+WorkForceIQ combines workforce analytics, machine learning, retrieval-augmented generation (RAG), and generative AI to help HR teams understand employee data, reason over HR policies, identify workforce risks, and generate actionable insights across multiple HR data sources.
 
-## Features In Phase 1
+## Why WorkForceIQ
 
-- FastAPI backend with JWT authentication
-- SQLAlchemy 2 models for the full workforce domain
-- Role-based authorization foundations for ADMIN, HR_ADMIN, HR_MANAGER, RECRUITER, MANAGER, and EMPLOYEE
-- Password hashing with Passlib
-- Centralized error handling and consistent API error responses
-- Audit logging for registration, login, and protected user access
-- Deterministic seed script for roles and demo users
-- Next.js 15 frontend with login/register/dashboard flows
+HR teams often need to interpret information spread across employee records, policy documents, performance data, recruitment activity, and organizational reports. WorkForceIQ provides a unified foundation for turning that information into clear, governed, and decision-ready insights.
+
+The platform is being built around a responsible AI approach: approved data is retrieved before AI processing, API credentials remain server-side, and role-based access controls protect sensitive workforce information.
+
+## Key Features
+
+### Workforce Intelligence
+
+- Analyze workforce data and organizational patterns
+- Identify potential workforce risk indicators
+- Generate summaries and evidence-backed insights
+- Support recruitment, onboarding, performance, and policy workflows
+- Bring analytics and AI assistance into a single HR platform
+
+### AI and RAG
+
+- Dedicated backend prompt structure for workforce use cases
+- Retrieval-ready architecture using pgvector
+- Server-side LLM and embedding API integration
+- Context-specific prompts for recruitment, policy, onboarding, performance, interviewing, and workforce analysis
+- Designed to retrieve approved enterprise data before generating responses
+
+### Enterprise Application Foundation
+
+- FastAPI REST API
+- JWT-based authentication
+- Role-based access control
+- SQLAlchemy 2 database models
+- PostgreSQL and pgvector support
+- Redis-backed infrastructure
+- Centralized exception and API error handling
+- Audit logging for authentication and protected user access
+- Docker Compose deployment for the full application stack
+
+### Frontend Experience
+
+- Next.js 15 application with React 19
+- Login and registration flows
+- Enterprise dashboard shell
+- Sidebar and top navigation
+- Dashboard cards and notifications
 - TanStack Query API integration
-- Enterprise SaaS layout with sidebar, topbar, dashboard cards, notifications, and global assistant entry point
-- Docker Compose for frontend, backend, PostgreSQL/pgvector, and Redis
-- Pytest coverage for auth and RBAC basics
+- Recharts-based visualization support
+- Responsive Tailwind CSS interface
+
+## User Roles
+
+WorkForceIQ includes foundations for the following roles:
+
+- `ADMIN`
+- `HR_ADMIN`
+- `HR_MANAGER`
+- `RECRUITER`
+- `MANAGER`
+- `EMPLOYEE`
+
+Role definitions support future, fine-grained authorization across workforce, recruitment, policy, and analytics features.
 
 ## Demo Credentials
 
-After seeding:
+After running the seed script:
 
-- Admin: `admin@workforceiq.demo` / `AdminPass123!`
-- HR Admin: `hr.admin@workforceiq.demo` / `HrAdminPass123!`
-- Recruiter: `recruiter@workforceiq.demo` / `RecruiterPass123!`
-- Employee: `employee@workforceiq.demo` / `EmployeePass123!`
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@workforceiq.demo` | `AdminPass123!` |
+| HR Admin | `hr.admin@workforceiq.demo` | `HrAdminPass123!` |
+| Recruiter | `recruiter@workforceiq.demo` | `RecruiterPass123!` |
+| Employee | `employee@workforceiq.demo` | `EmployeePass123!` |
+
+## Technology Stack
+
+### Backend
+
+- Python
+- FastAPI
+- SQLAlchemy 2
+- Alembic
+- Pydantic
+- JWT authentication
+- PostgreSQL
+- pgvector
+- Redis
+- Pandas and NumPy
+- Scikit-learn
+- Pytest
+- PDF and DOCX processing
+
+### Frontend
+
+- TypeScript
+- Next.js 15
+- React 19
+- TanStack Query
+- React Hook Form
+- Zod
+- Tailwind CSS
+- Recharts
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+- PostgreSQL 16 with pgvector
+- Redis 7
 
 ## Architecture
 
 ```text
 Browser
-  -> Next.js frontend
-  -> FastAPI REST API
-  -> SQLAlchemy
-  -> PostgreSQL + pgvector in Docker
-  -> AI services, RAG, ML analytics, and job processing modules
+  │
+  ▼
+Next.js Frontend
+  │  REST API
+  ▼
+FastAPI Backend
+  ├── Authentication and RBAC
+  ├── Workforce domain services
+  ├── API validation and error handling
+  └── AI and RAG services
+       │
+       ├── Retrieval: PostgreSQL + pgvector
+       ├── Analytics: Pandas, NumPy, Scikit-learn
+       └── Generative AI: server-side LLM providers
+
+Redis provides supporting infrastructure for caching, jobs, and asynchronous workflows.
 ```
 
-## Local Backend
+API keys and provider configuration are kept on the backend. They are not exposed through the Next.js application.
+
+## Project Structure
+
+```text
+WorkForceIQx/
+├── backend/
+│   ├── app/
+│   │   ├── ai/              # Prompts and AI integration foundations
+│   │   ├── api/             # Routes and API router
+│   │   ├── core/            # Configuration, security, and errors
+│   │   ├── db/              # Database initialization and sessions
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── schemas/         # Pydantic request and response schemas
+│   │   └── services/        # Business and application services
+│   ├── migrations/          # Alembic migrations
+│   ├── scripts/             # Database seed and maintenance scripts
+│   └── tests/               # Backend test suite
+├── frontend/
+│   ├── app/                 # Next.js routes and layouts
+│   ├── components/          # Shared and application components
+│   └── lib/                 # API clients and frontend utilities
+├── docker-compose.yml
+└── .env.example
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10 or newer
+- Node.js 18 or newer
+- npm
+- Docker and Docker Compose for the containerized setup
+
+### Option 1: Docker Compose
+
+From the repository root:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+The application services will be available at:
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+- PostgreSQL: `localhost:5432`
+- Redis: `localhost:6379`
+
+Stop the stack with:
+
+```bash
+docker compose down
+```
+
+To remove the PostgreSQL volume as well:
+
+```bash
+docker compose down -v
+```
+
+### Option 2: Local Backend
 
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate
+```
+
+Activate the virtual environment:
+
+- Windows: `.venv\Scripts\activate`
+- macOS/Linux: `source .venv/bin/activate`
+
+Install dependencies and seed the database:
+
+```bash
 pip install -r requirements.txt
 python -m scripts.seed
 uvicorn app.main:app --reload
 ```
 
-The backend defaults to `sqlite:///./workforceiq.db` when `DATABASE_URL` is not provided. Docker uses PostgreSQL.
+Without `DATABASE_URL`, the backend uses SQLite at `sqlite:///./workforceiq.db`. Docker uses PostgreSQL.
 
-## Local Frontend
+### Option 3: Local Frontend
+
+In a separate terminal:
 
 ```bash
 cd frontend
@@ -60,94 +230,131 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
-## Docker
-
-```bash
-docker compose up --build
-```
-
-Services:
-
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:8000`
-- Swagger: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+Open http://localhost:3000.
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and adjust values for local or deployed environments.
+Copy `.env.example` to `.env` and update values for your environment.
 
-Important variables:
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | SQLAlchemy database connection URL |
+| `JWT_SECRET` | Secret used to sign access tokens |
+| `JWT_ALGORITHM` | JWT signing algorithm |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Access token lifetime |
+| `BACKEND_CORS_ORIGINS` | Comma-separated frontend origins allowed by CORS |
+| `LLM_API_KEY` | API credential for the configured LLM provider |
+| `EMBEDDING_API_KEY` | API credential for embedding generation |
+| `REDIS_URL` | Redis connection URL |
+| `NEXT_PUBLIC_API_URL` | Base URL used by the frontend to call the backend |
 
-- `DATABASE_URL`
-- `JWT_SECRET`
-- `JWT_ALGORITHM`
-- `ACCESS_TOKEN_EXPIRE_MINUTES`
-- `BACKEND_CORS_ORIGINS`
-- `LLM_API_KEY`
-- `EMBEDDING_API_KEY`
-- `REDIS_URL`
-- `NEXT_PUBLIC_API_URL`
+> Use a strong, unique `JWT_SECRET` outside local development. Do not commit real API keys or production credentials.
 
-## Folder Structure
+## API Overview
 
-```text
-backend/
-  app/
-    ai/prompts/
-    api/routes/
-    core/
-    db/
-    models/
-    schemas/
-    services/
-  migrations/
-  scripts/
-  tests/
-frontend/
-  app/
-  components/
-  lib/
-```
+FastAPI exposes interactive API documentation through:
 
-## API Documentation
+- Swagger UI: `/docs`
+- ReDoc: `/redoc`
 
-FastAPI exposes:
+### Implemented endpoints
 
-- `/docs`
-- `/redoc`
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | API health status |
+| `POST` | `/api/auth/register` | Register a user |
+| `POST` | `/api/auth/login` | Authenticate and receive an access token |
+| `GET` | `/api/auth/me` | Retrieve the authenticated user |
+| `GET` | `/api/users` | List users with role authorization |
 
-Implemented Phase 1 endpoints:
+## AI Architecture
 
-- `GET /api/health`
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/auth/me`
-- `GET /api/users`
+The backend AI package is organized around dedicated workforce domains:
 
-## AI And ML Architecture
+- Recruitment
+- HR policy
+- Onboarding
+- Performance
+- Workforce analytics
+- Interview support
+- Shared system instructions
 
-Phase 1 includes the package and prompt structure for the AI engine:
+The intended production flow is:
 
-- `backend/app/ai/prompts/system.py`
-- `backend/app/ai/prompts/recruitment.py`
-- `backend/app/ai/prompts/policy.py`
-- `backend/app/ai/prompts/onboarding.py`
-- `backend/app/ai/prompts/performance.py`
-- `backend/app/ai/prompts/workforce.py`
-- `backend/app/ai/prompts/interview.py`
+1. Authenticate and authorize the request.
+2. Validate and filter the user's access scope.
+3. Retrieve relevant approved documents or workforce records.
+4. Build a domain-specific prompt with retrieved evidence.
+5. Generate a response through a server-side AI provider.
+6. Return the answer with an audit trail and source context where applicable.
 
-The AI contract is intentionally server-side only. API keys are never exposed to the frontend. Future phases should route all LLM calls through backend services that retrieve approved data before reasoning.
+This design helps prevent credentials and sensitive retrieved context from being exposed to the frontend.
 
 ## Testing
+
+Run the backend test suite from the repository root:
 
 ```bash
 cd backend
 pytest
 ```
 
-Current tests cover registration, login, `/me`, and role-restricted user listing.
-In the testing phase.
+Current tests cover:
 
+- User registration
+- Login
+- Current-user retrieval
+- Role-restricted user listing
+
+For frontend validation:
+
+```bash
+cd frontend
+npm run typecheck
+npm run lint
+npm run build
+```
+
+## Development Status
+
+WorkForceIQ is currently established around a production-oriented application foundation and Phase 1 features. Authentication, RBAC, domain models, seed data, the frontend shell, Docker infrastructure, and AI package scaffolding are present.
+
+Planned evolution includes:
+
+- Document ingestion and policy indexing
+- Vector search and retrieval pipelines
+- ML-powered workforce risk modeling
+- Recruitment and candidate intelligence workflows
+- Policy question answering with source citations
+- Performance and employee analytics
+- Background document and embedding jobs
+- Fine-grained data governance and audit trails
+- Production observability and model safeguards
+
+## Security and Responsible Use
+
+Workforce data can contain sensitive personal information. Any deployment of WorkForceIQ should include:
+
+- Strong production secrets
+- HTTPS and secure network boundaries
+- Least-privilege role policies
+- Tenant and data-access isolation where required
+- Prompt injection and data exfiltration protections
+- Review and approval workflows for AI-generated decisions
+- Human oversight for employment, promotion, discipline, and compensation decisions
+- Retention, deletion, and audit policies
+- Compliance review for applicable labor and privacy regulations
+
+AI insights should support—not replace—qualified human judgment.
+
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes with relevant tests.
+4. Run backend and frontend validation.
+5. Open a pull request with a clear summary and testing evidence.
+
+## License
+
+No license is currently specified for this repository. A license should be added before reuse or distribution outside the project team.
